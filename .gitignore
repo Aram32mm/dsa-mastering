@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# JavaScript/Node
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# C++
+*.exe
+*.out
+*.app
+*.o
+*.obj
+
+# Java
+*.class
+*.jar
+target/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
