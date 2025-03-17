@@ -84,6 +84,16 @@ int32_t main(){
     return 0;
 }""")
     
+    # Create empty input and output files
+    input_path = os.path.join(dir_path, "input.txt")
+    output_path = os.path.join(dir_path, "output.txt")
+    
+    with open(input_path, "w") as f:
+        f.write("// Test input goes here\n")
+    
+    with open(output_path, "w") as f:
+        f.write("// Expected output goes here\n")
+    
     print(f"Created problem template for {composed_id}. {problem_title}")
     
     # Prompt user to select a category
@@ -154,3 +164,4 @@ if __name__ == "__main__":
     platform = sys.argv[4] if len(sys.argv) > 4 else None
     
     create_problem_directory(problem_id, problem_title, difficulty, platform)
+
