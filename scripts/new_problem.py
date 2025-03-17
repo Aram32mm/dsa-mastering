@@ -3,16 +3,46 @@ import os
 import sys
 import re
 
-def create_problem_directory(problem_id, problem_title, difficulty):
-    # Format the problem ID with leading zeros
-    formatted_id = f"{int(problem_id):04d}"
+def create_problem_directory(problem_id, problem_title, difficulty, platform=None):
+    # Get platform if not provided
+    if platform is None:
+        platforms = ["leetcode", "codeforces", "atcoder", "hackerrank", "spoj", "other"]
+        print("\nSelect problem platform:")
+        for i, plat in enumerate(platforms):
+            print(f"{i+1}. {plat.capitalize()}")
+        
+        while True:
+            try:
+                choice = int(input("\nSelect platform (number): "))
+                if 1 <= choice <= len(platforms):
+                    platform = platforms[choice-1]
+                    break
+                else:
+                    print("Invalid choice. Please try again.")
+            except ValueError:
+                print("Please enter a number.")
+    
+    # Format the ID based on platform
+    if platform.lower() == "leetcode":
+        # Format the problem ID with leading zeros for LeetCode
+        formatted_id = f"{int(problem_id):04d}"
+        composed_id = formatted_id
+    elif platform.lower() == "codeforces":
+        # For Codeforces, use format like CF1234A
+        composed_id = f"CF{problem_id}"
+    elif platform.lower() == "atcoder":
+        # For AtCoder, use format like ABC123_A
+        composed_id = problem_id  # Assume proper format like ABC123_A
+    else:
+        # For other platforms, use the ID as-is
+        composed_id = problem_id
     
     # Create a slug from the title
     slug = re.sub(r'[^a-z0-9]', '-', problem_title.lower())
     slug = re.sub(r'-+', '-', slug).strip('-')
     
-    # Create directory name
-    dir_name = f"{formatted_id}-{slug}"
+    # Create directory name with platform prefix
+    dir_name = f"{composed_id}-{slug}"
     dir_path = os.path.join("problems", dir_name)
     
     # Create the directory if it doesn't exist
@@ -23,7 +53,8 @@ def create_problem_directory(problem_id, problem_title, difficulty):
     # Create README.md with template
     readme_path = os.path.join(dir_path, "README.md")
     with open(readme_path, "w") as f:
-        f.write(f"# {formatted_id}. {problem_title}\n\n")
+        f.write(f"# {composed_id}. {problem_title}\n\n")
+        f.write(f"Platform: {platform.capitalize()}\n")
         f.write(f"Difficulty: {difficulty}\n\n")
         f.write("## Problem Description\n<!-- Copy the problem description here -->\n\n")
         f.write("## Approach\n<!-- Describe your approach to solving the problem -->\n\n")
@@ -33,21 +64,27 @@ def create_problem_directory(problem_id, problem_title, difficulty):
     # Create empty C++ solution file
     solution_path = os.path.join(dir_path, "solution.cpp")
     with open(solution_path, "w") as f:
-        f.write(""" #include <vector>
-                    #include <string>
-                    #include <unordered_map>
-                    using namespace std;
+        f.write("""#include <bits/stdc++.h>
 
-                    class Solution {
-                    public:
-                        // TODO: Replace with correct function signature
-                        void solution() {
-                            // TODO: Implement solution
-                        }
-                    };
-                    """)
+#define int long long int
+#define F first
+#define S second
+#define pb push_back 
+
+using namespace std;
+
+
+int32_t main(){
+
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+
+    return 0;
+}""")
     
-    print(f"Created problem template for {formatted_id}. {problem_title}")
+    print(f"Created problem template for {composed_id}. {problem_title}")
     
     # Prompt user to select a category
     print("\nAvailable Categories:")
@@ -102,28 +139,18 @@ def create_problem_directory(problem_id, problem_title, difficulty):
     
     # Append to category file
     with open(category_file, "a") as f:
-        f.write(f"- [{formatted_id}. {problem_title}](../problems/{dir_name}/README.md) - {difficulty}\n")
+        f.write(f"- [{composed_id}. {problem_title}](../problems/{dir_name}/README.md) - {platform.capitalize()}, {difficulty}\n")
     
     print(f"Added to {category} category")
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Usage: python new_problem.py <problem_id> <problem_title> <difficulty>")
+        print("Usage: python new_problem.py <problem_id> <problem_title> <difficulty> [platform]")
         sys.exit(1)
     
     problem_id = sys.argv[1]
     problem_title = sys.argv[2]
     difficulty = sys.argv[3] if len(sys.argv) > 3 else "Medium"
+    platform = sys.argv[4] if len(sys.argv) > 4 else None
     
-    create_problem_directory(problem_id, problem_title, difficulty)
-
-if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Usage: python new_problem.py <problem_id> <problem_title> <difficulty>")
-        sys.exit(1)
-    
-    problem_id = sys.argv[1]
-    problem_title = sys.argv[2]
-    difficulty = sys.argv[3] if len(sys.argv) > 3 else "Medium"
-    
-    create_problem_directory(problem_id, problem_title, difficulty)
+    create_problem_directory(problem_id, problem_title, difficulty, platform)
