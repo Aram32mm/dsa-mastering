@@ -6,7 +6,7 @@ import re
 def create_problem_directory(problem_id, problem_title, difficulty, platform=None):
     # Get platform if not provided
     if platform is None:
-        platforms = ["leetcode", "codeforces", "atcoder", "hackerrank", "spoj", "other"]
+        platforms = ["leetcode", "codeforces", "atcoder", "hackerrank", "udemy", "spoj", "geeksforgeeks", "other"]
         print("\nSelect problem platform:")
         for i, plat in enumerate(platforms):
             print(f"{i+1}. {plat.capitalize()}")
@@ -23,19 +23,27 @@ def create_problem_directory(problem_id, problem_title, difficulty, platform=Non
                 print("Please enter a number.")
     
     # Format the ID based on platform
+    formatted_id = f"{int(problem_id):04d}"
     if platform.lower() == "leetcode":
         # Format the problem ID with leading zeros for LeetCode
-        formatted_id = f"{int(problem_id):04d}"
-        composed_id = formatted_id
+        composed_id = f"LC{formatted_id}"
     elif platform.lower() == "codeforces":
         # For Codeforces, use format like CF1234A
-        composed_id = f"CF{problem_id}"
+        composed_id = f"CF{formatted_id}"
     elif platform.lower() == "atcoder":
-        # For AtCoder, use format like ABC123_A
-        composed_id = problem_id  # Assume proper format like ABC123_A
+        # For AtCoder, use format like AC
+        composed_id = f"AC{formatted_id}"
+    elif platform.lower() == "hackerrank":
+        composed_id = f"HR{formatted_id}"
+    elif platform.lower() == "udemy":
+        composed_id = f"UD{formatted_id}"
+    elif platform.lower() == "spoj":
+        composed_id = f"SP{formatted_id}"
+    elif platform.lower() == "geeksforgeeks":
+        composed_id = f"GFG{formatted_id}"
     else:
-        # For other platforms, use the ID as-is
-        composed_id = problem_id
+        # For other platforms, add a prefix
+        composed_id = f"OT{formatted_id}"
     
     # Create a slug from the title
     slug = re.sub(r'[^a-z0-9]', '-', problem_title.lower())
@@ -43,9 +51,17 @@ def create_problem_directory(problem_id, problem_title, difficulty, platform=Non
     
     # Create directory name with platform prefix
     dir_name = f"{composed_id}-{slug}"
-    dir_path = os.path.join("problems", dir_name)
     
-    # Create the directory if it doesn't exist
+    # Create platform directory within problems if it doesn't exist
+    platform_dir = os.path.join("problems", platform.lower())
+    if not os.path.exists(platform_dir):
+        os.makedirs(platform_dir)
+        print(f"Created platform directory: {platform_dir}")
+    
+    # Create problem directory path within the platform directory
+    dir_path = os.path.join(platform_dir, dir_name)
+    
+    # Create the problem directory if it doesn't exist
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
         print(f"Created directory: {dir_path}")
@@ -82,7 +98,8 @@ int32_t main(){
 #endif
 
     return 0;
-}""")
+}
+""")
     
     # Create empty input and output files
     input_path = os.path.join(dir_path, "input.txt")
@@ -147,9 +164,10 @@ int32_t main(){
         with open(category_file, "w") as f:
             f.write(f"# {category.capitalize().replace('-', ' ')} Problems\n\n")
     
-    # Append to category file
+    # Append to category file with updated relative path
     with open(category_file, "a") as f:
-        f.write(f"- [{composed_id}. {problem_title}](../problems/{dir_name}/README.md) - {platform.capitalize()}, {difficulty}\n")
+        # Update relative path to reflect new directory structure
+        f.write(f"- [{composed_id}. {problem_title}](../problems/{platform.lower()}/{dir_name}/README.md) - {platform.capitalize()}, {difficulty}\n")
     
     print(f"Added to {category} category")
 
@@ -164,4 +182,5 @@ if __name__ == "__main__":
     platform = sys.argv[4] if len(sys.argv) > 4 else None
     
     create_problem_directory(problem_id, problem_title, difficulty, platform)
+
 
