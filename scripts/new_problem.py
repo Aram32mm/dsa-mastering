@@ -81,21 +81,51 @@ def create_problem_directory(problem_id, problem_title, difficulty, platform=Non
     solution_path = os.path.join(dir_path, "solution.cpp")
     with open(solution_path, "w") as f:
         f.write("""#include <bits/stdc++.h>
-
-#define int long long int
-#define F first
-#define S second
-#define pb push_back 
-
 using namespace std;
 
+#define FAST_IO ios::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
+#define ll long long
+#define vi vector<int>
+#define vvi vector<vector<int>>
+#define pii pair<int, int>
+#define pb push_back
+#define all(x) x.begin(), x.end()
 
-int32_t main(){
 
 #ifndef ONLINE_JUDGE
+void setIO() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
+}
+#else
+void setIO() {}
 #endif
+
+// Code Here
+
+void solve() {
+    int n, r;
+    cin >> n >> r;
+    vi nums(n);
+    for (int& x : nums) cin >> x;
+
+    // vvi result = ;
+    // for (const auto& triplet : result) {
+    //     for (int x : triplet) cout << x << " ";
+    //     cout << "\n";
+    // }
+    cout << "---\n";
+}
+
+int main() {
+    FAST_IO;
+    setIO();
+
+    int T;
+    cin >> T;
+    while (T--) {
+        solve();
+    }
 
     return 0;
 }

@@ -18,6 +18,9 @@ yarn-debug.log
 *.o
 *.obj
 
+# File
+output.txt
+
 # Java
 *.class
 *.jar
