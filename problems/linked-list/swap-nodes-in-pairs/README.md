@@ -1,4 +1,4 @@
-# swap-Nodes-In-Pairs
+# Swap Nodes In Pairs
 
 ## Problem Description
 Given a linked list, swap every two adjacent nodes and return the head of the modified list. You should swap the nodes themselves, not just their values.

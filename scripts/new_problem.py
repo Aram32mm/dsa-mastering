@@ -3,65 +3,12 @@ import os
 import sys
 import re
 
-#!/usr/bin/env python3
-import os
-import sys
-import re
-
 def create_problem_directory(problem_title):
-    # Slug from title
-    slug = re.sub(r'[^a-z0-9]', '-', problem_title.lower())
-    slug = re.sub(r'-+', '-', slug).strip('-')
-    dir_name = slug
-
-    # Problems directory
-    dir_path = os.path.join("problems", dir_name)
-    os.makedirs(dir_path, exist_ok=True)
-
-    # Create README.md with minimal template
-    readme_path = os.path.join(dir_path, "README.md")
-    with open(readme_path, "w") as f:
-        f.write(f"# {problem_title}\n\n")
-        f.write("## Problem Description\n<!-- Copy the problem description here -->\n\n")
-        f.write("## Approach\n<!-- Describe your approach -->\n\n")
-        f.write("## Complexity\n- Time: O(?)\n- Space: O(?)\n")
-
-    # Python solution template (just answer + call)
-    solution_path = os.path.join(dir_path, "solution.py")
-    with open(solution_path, "w") as f:
-        f.write("""class Solution:
-    def solve(self, *args, **kwargs):
-        # Implement your core logic here
-        return
-
-def test_solution():
-    sol = Solution()
-    
-    # Example 1
-    result1 = sol.solve()
-    print("Result 1:", result1)
-    # assert result1 == expected_value
-
-    # Example 2
-    result2 = sol.solve()
-    print("Result 2:", result2)
-    # assert result2 == expected_value
-
-    print("All test cases passed!")
-
-if __name__ == "__main__":
-    test_solution()
-    
-""")
-
-    print(f"Created problem directory for {problem_title}")
-
-    # Category selection
     categories = [
         "arrays", "strings", "hash-table", "dynamic-programming", 
         "math", "greedy", "sorting", "binary-search", "tree", 
         "depth-first-search", "breadth-first-search", "graph",
-        "backtracking", "stack", "queue", "heap", "linked-list", 
+        "backtracking", "stack", "queue", "heap", "linked-list", "doubly-linked-list", 
         "sliding-window", "two-pointers", "bit-manipulation", "design"
     ]
 
@@ -93,15 +40,77 @@ if __name__ == "__main__":
         except ValueError:
             print("Please enter a number.")
 
-    category_file = os.path.join("categories", f"{category}.md")
-    if not os.path.exists(category_file):
-        with open(category_file, "w") as f:
-            f.write(f"# {category.capitalize().replace('-', ' ')} Problems\n\n")
+    # Create unique slug: <category>-<title>
+    slug = f"{re.sub(r'[^a-z0-9]', '-', problem_title.lower())}"
+    slug = re.sub(r'-+', '-', slug).strip('-')
 
-    with open(category_file, "a") as f:
-        f.write(f"- [{problem_title}](../problems/{dir_name}/README.md)\n")
+    # Create directory: problems/<category>/<slug>
+    dir_path = os.path.join("problems", category, slug)
+    os.makedirs(dir_path, exist_ok=True)
 
-    print(f"Added to {category} category")
+    # README.md
+    readme_path = os.path.join(dir_path, "README.md")
+    with open(readme_path, "w") as f:
+        f.write(f"# {problem_title}\n\n")
+        f.write("## Problem Description\n<!-- Copy the problem description here -->\n\n")
+        f.write("## Approach\n<!-- Describe your approach -->\n\n")
+        f.write("## Complexity\n- Time: O(?)\n- Space: O(?)\n")
+
+    # solution.py
+    solution_path = os.path.join(dir_path, "solution.py")
+    with open(solution_path, "w") as f:
+        f.write("""class Solution:
+    def solve(self, *args, **kwargs):
+        # Implement your core logic here
+        return
+
+def test_solution():
+    sol = Solution()
+    
+    # Example 1
+    result1 = sol.solve()
+    print("Result 1:", result1)
+    # assert result1 == expected_value
+
+    # Example 2
+    result2 = sol.solve()
+    print("Result 2:", result2)
+    # assert result2 == expected_value
+
+    print("All test cases passed!")
+
+if __name__ == "__main__":
+    test_solution()
+""")
+
+    print(f"Created problem directory for {problem_title} in category '{category}'")
+
+    # Update master categories file
+    categories_file = os.path.join("categories", "categories.md")
+    if not os.path.exists(categories_file):
+        with open(categories_file, "w") as f:
+            f.write("# Problem Categories\n\n")
+
+    # Read current content
+    with open(categories_file, "r") as f:
+        content = f.read()
+
+    # Check if category section exists
+    category_header = f"## {category.capitalize().replace('-', ' ')}"
+    if category_header not in content:
+        content += f"\n{category_header}\n"
+
+    # Add problem entry
+    problem_entry = f"- [{problem_title}](../problems/{category}/{slug}/README.md)\n"
+    if problem_entry not in content:
+        content += problem_entry
+
+    # Write back
+    with open(categories_file, "w") as f:
+        f.write(content)
+
+    print(f"Added to categories.md under '{category}'")
+
 
 def create_problem_directory_heavy_weight(problem_id, problem_title, difficulty, platform=None):
     # Get platform if not provided

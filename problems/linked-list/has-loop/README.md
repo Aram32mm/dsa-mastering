@@ -1,4 +1,4 @@
-# Has-Loop
+# Has Loop
 
 ## Problem Description
 Given a linked list, determine if it contains a cycle (a loop). A cycle in a linked list occurs when a node's next pointer points to a previously visited node, causing a loop in the traversal.

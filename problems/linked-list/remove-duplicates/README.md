@@ -1,4 +1,4 @@
-# Remove-Duplicates
+# Remove Duplicates
 
 ## Problem Description
 Given an unsorted linked list, remove all duplicate values so that each value appears only once in the list.

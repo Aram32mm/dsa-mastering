@@ -1,4 +1,4 @@
-# Partition-List
+# Partition List
 
 ## Problem Description
 Given a linked list and a value x, partition the linked list such that all nodes with values less than x come before nodes with values greater than or equal to x. The original relative order of the nodes should be preserved.

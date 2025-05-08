@@ -1,4 +1,4 @@
-# Binary-To-Decimal
+# Binary To Decimal
 
 ## Problem Description
 Given a linked list where each node contains a single digit, convert the binary number represented by this linked list to a decimal integer.
