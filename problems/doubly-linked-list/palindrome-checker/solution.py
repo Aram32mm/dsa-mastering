@@ -68,8 +68,10 @@ class Solution:
         
         while current:
             next_node = current.next
+            
             current.next = prev
             current.prev = next_node
+            
             prev = current
             current = next_node
             
@@ -97,34 +99,26 @@ def create_doubly_linked_list(values):
 def test_solution():
     solution = Solution()
     
-    # Test case 1: Palindrome (even length)
     head1 = create_doubly_linked_list([1, 2, 2, 1])
     assert solution.is_palindrome(head1) == True
     
-    # Test case 2: Palindrome (odd length)
     head2 = create_doubly_linked_list([1, 2, 3, 2, 1])
     assert solution.is_palindrome(head2) == True
     
-    # Test case 3: Not a palindrome
     head3 = create_doubly_linked_list([1, 2, 3, 4])
     assert solution.is_palindrome(head3) == False
     
-    # Test case 4: Single node (trivial palindrome)
     head4 = create_doubly_linked_list([5])
     assert solution.is_palindrome(head4) == True
     
-    # Test case 5: Empty list (trivial palindrome)
     assert solution.is_palindrome(None) == True
     
-    # Test case 6: Two nodes (palindrome)
     head6 = create_doubly_linked_list([7, 7])
     assert solution.is_palindrome(head6) == True
     
-    # Test case 7: Two nodes (not a palindrome)
     head7 = create_doubly_linked_list([7, 8])
     assert solution.is_palindrome(head7) == False
     
-    # Test case 8: Longer palindrome
     head8 = create_doubly_linked_list([1, 2, 3, 4, 5, 4, 3, 2, 1])
     assert solution.is_palindrome(head8) == True
     
